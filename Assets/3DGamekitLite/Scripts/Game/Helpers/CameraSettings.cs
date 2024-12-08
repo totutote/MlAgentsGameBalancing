@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
+using Unity.Cinemachine;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 namespace Gamekit3D
@@ -82,8 +83,8 @@ namespace Gamekit3D
             controllerCamera.Follow = follow;
             controllerCamera.LookAt = lookAt;
 
-            keyboardAndMouseCamera.Priority = inputChoice == InputChoice.KeyboardAndMouse ? 1 : 0;
-            controllerCamera.Priority = inputChoice == InputChoice.Controller ? 1 : 0;
+            keyboardAndMouseCamera.Priority.Value = inputChoice == InputChoice.KeyboardAndMouse ? 1 : 0;
+            controllerCamera.Priority.Value = inputChoice == InputChoice.Controller ? 1 : 0;
         }
     } 
 }
