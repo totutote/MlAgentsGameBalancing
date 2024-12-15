@@ -77,3 +77,8 @@ crashlytics-build.properties
 # Editor
 .vscode/
 MlAgentsGameBalancing.code-workspace
+
+# ml-agents
+Assets/Demonstrations/3DGameKitDefault_*.demo
+Assets/Demonstrations/3DGameKitDefault_*.demo.meta
+Assets/ML-Agents/Timers
