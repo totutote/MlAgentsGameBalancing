@@ -28,6 +28,7 @@ namespace Gamekit3D
         SerializedProperty m_EmoteDeathPlayerProp;
         SerializedProperty m_EmoteAttackPlayerProp;
         SerializedProperty m_EmoteJumpPlayerProp;
+        SerializedProperty m_playerAgent;
 
         GUIContent m_ScriptContent = new GUIContent("Script");
 
@@ -47,6 +48,8 @@ namespace Gamekit3D
         GUIContent m_EmoteDeathPlayerContent = new GUIContent("Emote Death Player", "Used to play a random vocal sound when Ellen dies.");
         GUIContent m_EmoteAttackPlayerContent = new GUIContent("Emote Attack Player", "Used to play a random vocal sound when Ellen attacks.");
         GUIContent m_EmoteJumpPlayerContent = new GUIContent("Emote Jump Player", "Used to play a random vocal sound when Ellen jumps.");
+
+        GUIContent m_playerAgentContent = new GUIContent("Player Agent", "Player ml-agent agent class");
 
         void OnEnable()
         {
@@ -69,6 +72,8 @@ namespace Gamekit3D
             m_EmoteDeathPlayerProp = serializedObject.FindProperty("emoteDeathPlayer");
             m_EmoteAttackPlayerProp = serializedObject.FindProperty("emoteAttackPlayer");
             m_EmoteJumpPlayerProp = serializedObject.FindProperty("emoteJumpPlayer");
+
+            m_playerAgent = serializedObject.FindProperty("playerAgent");
         }
 
         public override void OnInspectorGUI()
@@ -106,6 +111,8 @@ namespace Gamekit3D
                 EditorGUILayout.PropertyField(m_EmoteJumpPlayerProp, m_EmoteJumpPlayerContent);
                 EditorGUI.indentLevel--;
             }
+
+            EditorGUILayout.PropertyField(m_playerAgent, m_playerAgentContent);
 
             serializedObject.ApplyModifiedProperties();
         }

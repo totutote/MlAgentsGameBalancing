@@ -20,6 +20,7 @@ public class PlayerInput : MonoBehaviour
     protected Vector2 m_Camera;
     protected bool m_Jump;
     protected bool m_Attack;
+    protected bool m_AttackInput = false;
     protected bool m_Pause;
     protected bool m_ExternalInputBlocked;
 
@@ -30,6 +31,10 @@ public class PlayerInput : MonoBehaviour
             if(playerControllerInputBlocked || m_ExternalInputBlocked)
                 return Vector2.zero;
             return m_Movement;
+        }
+        set
+        {
+            m_Movement = value;
         }
     }
 
@@ -46,11 +51,17 @@ public class PlayerInput : MonoBehaviour
     public bool JumpInput
     {
         get { return m_Jump && !playerControllerInputBlocked && !m_ExternalInputBlocked; }
+        set { m_Jump = value; }
     }
 
     public bool Attack
     {
         get { return m_Attack && !playerControllerInputBlocked && !m_ExternalInputBlocked; }
+    }
+
+    public bool AttackInput
+    {
+        set { m_AttackInput = value; }
     }
 
     public bool Pause
@@ -76,11 +87,12 @@ public class PlayerInput : MonoBehaviour
 
     void Update()
     {
-        m_Movement.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        m_Camera.Set(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        m_Jump = Input.GetButton("Jump");
+        //m_Movement.Set(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        //m_Camera.Set(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        //m_Jump = Input.GetButton("Jump");
 
-        if (Input.GetButtonDown("Fire1"))
+//        if (Input.GetButtonDown("Fire1"))
+        if (m_AttackInput)
         {
             if (m_AttackWaitCoroutine != null)
                 StopCoroutine(m_AttackWaitCoroutine);

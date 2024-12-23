@@ -32,6 +32,8 @@ namespace Gamekit3D
         public RandomAudioPlayer emoteAttackPlayer;
         public RandomAudioPlayer emoteJumpPlayer;
 
+        public PlayerAgent playerAgent;
+
         protected AnimatorStateInfo m_CurrentStateInfo;    // Information about the base layer of the animator cached.
         protected AnimatorStateInfo m_NextStateInfo;
         protected bool m_IsAnimatorTransitioning;
@@ -667,6 +669,8 @@ namespace Gamekit3D
             {
                 hurtAudioPlayer.PlayRandomClip();
             }
+
+            playerAgent.OnDamage();
         }
 
         // Called by OnReceiveMessage and by DeathVolumes in the scene.
@@ -677,6 +681,8 @@ namespace Gamekit3D
             m_VerticalSpeed = 0f;
             m_Respawning = true;
             m_Damageable.isInvulnerable = true;
+
+            playerAgent.OnDie();
         }
     }
 }

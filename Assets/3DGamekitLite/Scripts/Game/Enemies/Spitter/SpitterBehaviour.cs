@@ -72,6 +72,8 @@ namespace Gamekit3D
 
         public void Death(Damageable.DamageMessage msg)
         {
+            m_Controller.OnDeathMlAgents();
+
             Vector3 pushForce = transform.position - msg.damageSource;
 
             pushForce.y = 0;

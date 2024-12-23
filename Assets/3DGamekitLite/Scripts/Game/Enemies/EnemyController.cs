@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace Gamekit3D
 {
@@ -19,6 +20,8 @@ namespace Gamekit3D
         public NavMeshAgent navmeshAgent { get { return m_NavMeshAgent; } }
         public bool followNavmeshAgent { get { return m_FollowNavmeshAgent; } }
         public bool grounded { get { return m_Grounded; } }
+
+        public UnityEvent OnDeath;
 
         protected NavMeshAgent m_NavMeshAgent;
         protected bool m_FollowNavmeshAgent;
@@ -159,6 +162,14 @@ namespace Gamekit3D
         public bool SetTarget(Vector3 position)
         {
             return m_NavMeshAgent.SetDestination(position);
+        }
+
+        public void OnDeathMlAgents()
+        {
+            if (OnDeath != null)
+            {
+                OnDeath.Invoke();
+            }
         }
     }
 }
