@@ -27,7 +27,7 @@ behaviors:
         learning_rate: 0.0003
         use_actions: true
         use_vail: false
-        demo_path: ../Assets/Demonstrations/3DGameKitDefault.demo
+        demo_path: Assets/Demonstrations/3DGameKitDefault.demo
     keep_checkpoints: 5
     max_steps: 3000000
     time_horizon: 128
