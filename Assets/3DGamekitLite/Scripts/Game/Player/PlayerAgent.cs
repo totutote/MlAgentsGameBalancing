@@ -10,6 +10,9 @@ public class PlayerAgent : Agent
     private PlayerInput playerInput;
 
     [SerializeField]
+    private Transform sensorCamera;
+
+    [SerializeField]
     private Transform movingPlatform;
 
     [SerializeField]
@@ -32,6 +35,11 @@ public class PlayerAgent : Agent
         if (Input.GetButtonDown("Fire1"))
         {
             isFireButtonPressed = true;
+        }
+
+        if (sensorCamera != null)
+        {
+            sensorCamera.rotation = Quaternion.Euler(90, 0, 0);
         }
     }
 
@@ -104,13 +112,18 @@ public class PlayerAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        playerInput.MoveInput = new Vector2(actionBuffers.ContinuousActions[0], actionBuffers.ContinuousActions[1]);
-        playerInput.AttackInput = actionBuffers.DiscreteActions[0] == 1;
-        playerInput.JumpInput = actionBuffers.DiscreteActions[1] == 1;
-        if (actionBuffers.DiscreteActions[0] == 1)
+        // playerInput.MoveInput = new Vector2(actionBuffers.ContinuousActions[0], actionBuffers.ContinuousActions[1]);
+        playerInput.MoveInput = new Vector2(
+            actionBuffers.DiscreteActions[0] == 4 ? 1 : actionBuffers.DiscreteActions[0] == 3 ? -1 : 0,
+            actionBuffers.DiscreteActions[0] == 1 ? 1 : actionBuffers.DiscreteActions[0] == 2 ? -1 : 0
+        );
+        playerInput.AttackInput = actionBuffers.DiscreteActions[1] == 1;
+        if (actionBuffers.DiscreteActions[1] == 1)
         {
             isFireButtonPressed = false;
         }
+
+        playerInput.JumpInput = actionBuffers.DiscreteActions[2] == 1;
 
         //AddReward(-0.0001f);
     }
@@ -119,22 +132,29 @@ public class PlayerAgent : Agent
     {
         // Debug.Log("Heuristic method called");
 
-        var continuousActionsOut = actionsOut.ContinuousActions;
-        continuousActionsOut[0] = Input.GetAxis("Horizontal");
-        continuousActionsOut[1] = Input.GetAxis("Vertical");
-
         var discreteActionsOut = actionsOut.DiscreteActions;
 
-        // フラグの状態を使用して処理を行う
+        // discreteActionsOut[0]を0から4に設定
+        if (Input.GetAxis("Horizontal") > 0)
+            discreteActionsOut[0] = 4;
+        else if (Input.GetAxis("Horizontal") < 0)
+            discreteActionsOut[0] = 3;
+        else if (Input.GetAxis("Vertical") > 0)
+            discreteActionsOut[0] = 1;
+        else if (Input.GetAxis("Vertical") < 0)
+            discreteActionsOut[0] = 2;
+        else
+            discreteActionsOut[0] = 0;
+
         if (isFireButtonPressed)
         {
-            discreteActionsOut[0] = 1;
+            discreteActionsOut[1] = 1;
             // フラグをリセット
             isFireButtonPressed = false;
         }
 
         // discreteActionsOut[0] = Input.GetButtonDown("Fire1") ? 1 : 0;
-        discreteActionsOut[1] = Input.GetButton("Jump") ? 1 : 0;
+        discreteActionsOut[2] = Input.GetButton("Jump") ? 1 : 0;
     }
 
     private void OnEndEpisode()

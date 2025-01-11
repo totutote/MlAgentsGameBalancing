@@ -343,6 +343,7 @@ namespace Gamekit3D
             Vector3 resultingForward = targetRotation * Vector3.forward;
 
             // If attacking try to orient to close enemies.
+            /*
             if (m_InAttack)
             {
                 // Find all the enemies in the local area.
@@ -386,6 +387,7 @@ namespace Gamekit3D
                     transform.rotation = Quaternion.LookRotation(resultingForward);
                 }
             }
+            */
 
             // Find the difference between the current rotation of the player and the desired rotation of the player in radians.
             float angleCurrent = Mathf.Atan2(transform.forward.x, transform.forward.z) * Mathf.Rad2Deg;
