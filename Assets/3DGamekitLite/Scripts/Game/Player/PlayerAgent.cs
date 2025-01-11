@@ -27,10 +27,13 @@ public class PlayerAgent : Agent
 
     private bool isFireButtonPressed = false;
 
-    private int restartCount = 0;
-
     void Update()
     {
+        if (StepCount > 5000)
+        {
+            OnEndEpisode();
+        }
+
         // ボタンが押された瞬間を検出し、フラグを立てる
         if (Input.GetButtonDown("Fire1"))
         {
@@ -61,7 +64,6 @@ public class PlayerAgent : Agent
         Debug.Log("OnEpisodeBegin called");
         AudioListener.pause = true;
         isEndEpisode = false;
-        restartCount = 0;
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -103,11 +105,6 @@ public class PlayerAgent : Agent
         }
 
         //sensor.AddObservation(playerInput.playerControllerInputBlocked);
-
-        if (restartCount++ > 3000)
-        {
-            OnEndEpisode();
-        }
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -169,7 +166,6 @@ public class PlayerAgent : Agent
         {
             return;
         }
-        restartCount = 0;
         SceneController.RestartZone();
     }
 
