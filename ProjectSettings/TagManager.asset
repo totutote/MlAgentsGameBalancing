@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - FlythroughCam
+  - Acid
+  - Enemy
+  - Box
+  - Pad
+  - Floor
   layers:
   - Default
   - TransparentFX

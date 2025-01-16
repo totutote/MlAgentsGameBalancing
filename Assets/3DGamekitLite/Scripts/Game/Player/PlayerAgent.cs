@@ -13,6 +13,9 @@ public class PlayerAgent : Agent
     private Transform sensorCamera;
 
     [SerializeField]
+    private Transform RaySensor;
+
+    [SerializeField]
     private Transform movingPlatform;
 
     [SerializeField]
@@ -21,11 +24,37 @@ public class PlayerAgent : Agent
     [SerializeField]
     private Damageable[] breakableBoxes;
 
+    [SerializeField]
+    private GameObject[] switches;
+
+    [SerializeField]
+    private float rewardDistanceMoved = 0.001f;
+
+    [SerializeField]
+    private float rewardOnDie = -1.0f;
+
+    [SerializeField]
+    private float rewardOnDamage = -0.01f;
+
+    [SerializeField]
+    private float rewardOnGoal = 1.0f;
+
+    [SerializeField]
+    private float rewardOnEnterTrigger = 5.0f;
+
+    [SerializeField]
+    private float rewardOnBoxBroken = 1.0f;
+
+    [SerializeField]
+    private float rewardOnEnemyDie = 1.0f;
+
     private bool[] switchStatus = new bool[10];
 
     private bool isEndEpisode = false;
 
     private bool isFireButtonPressed = false;
+
+    private Vector3 previousPosition; // 追加
 
     void Update()
     {
@@ -43,6 +72,12 @@ public class PlayerAgent : Agent
         if (sensorCamera != null)
         {
             sensorCamera.rotation = Quaternion.Euler(90, 0, 0);
+        }
+
+        if (RaySensor != null)
+        {
+            //RaySensor.position = new Vector3(RaySensor.position.x, 0.0f, RaySensor.position.z);
+            sensorCamera.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
@@ -64,12 +99,13 @@ public class PlayerAgent : Agent
         Debug.Log("OnEpisodeBegin called");
         AudioListener.pause = true;
         isEndEpisode = false;
+        previousPosition = transform.position; // 追加
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         // Debug.Log("CollectObservations called");
-        sensor.AddObservation(transform.position / 100f);
+        // sensor.AddObservation(transform.position / 100f);
         if (movingPlatform == null)
         {
             sensor.AddObservation(Vector3.zero);
@@ -79,6 +115,7 @@ public class PlayerAgent : Agent
             sensor.AddObservation(movingPlatform.position / 100f);
         }
 
+/*
         foreach (var enemyController in enemyControllers)
         {
             if (enemyController == null)
@@ -88,21 +125,47 @@ public class PlayerAgent : Agent
             }
             sensor.AddObservation(enemyController.transform.position / 100f);
         }
+*/
 
         foreach (var breakableBox in breakableBoxes)
         {
-            if (breakableBox == null || breakableBox.gameObject.activeSelf == false)
+            if (breakableBox == null || breakableBox.gameObject.activeInHierarchy == false)
             {
                 sensor.AddObservation(Vector3.zero);
+                sensor.AddObservation(0f);
                 continue;
             }
-            sensor.AddObservation(breakableBox.transform.position / 100f);
+            // プレイヤーとボックスの方向と距離を計算して観測に追加
+            Vector3 direction = (breakableBox.transform.position - transform.position).normalized;
+            float distance = Vector3.Distance(transform.position, breakableBox.transform.position);
+            sensor.AddObservation(direction);
+            sensor.AddObservation(distance / 100f); // 距離をスケール
+        }
+
+        // switchesの方向と距離を計算して観測に追加
+        foreach (var switchObj in switches)
+        {
+            if (switchObj == null || !switchObj.activeInHierarchy)
+            {
+                // 無効値を投入
+                sensor.AddObservation(Vector3.zero);
+                sensor.AddObservation(0f);
+                continue;
+            }
+            Vector3 direction = (switchObj.transform.position - transform.position).normalized;
+            float distance = Vector3.Distance(transform.position, switchObj.transform.position);
+            sensor.AddObservation(direction);
+            sensor.AddObservation(distance / 100f); // 距離をスケール
         }
         
+        /*
         foreach (var status in switchStatus)
         {
             sensor.AddObservation(status);
         }
+        */
+
+        sensor.AddObservation(playerInput.HaveControl());
 
         //sensor.AddObservation(playerInput.playerControllerInputBlocked);
     }
@@ -121,6 +184,15 @@ public class PlayerAgent : Agent
         }
 
         playerInput.JumpInput = actionBuffers.DiscreteActions[2] == 1;
+
+        // XZ平面上の移動距離を計算
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.z);
+        Vector2 prevPosition = new Vector2(previousPosition.x, previousPosition.z);
+        float distanceMoved = Vector2.Distance(currentPosition, prevPosition);
+        // 移動距離に基づいて報酬を追加
+        AddReward(distanceMoved * rewardDistanceMoved); // 報酬係数は調整可能
+        // 前回の位置を更新
+        previousPosition = transform.position;
 
         //AddReward(-0.0001f);
     }
@@ -161,7 +233,7 @@ public class PlayerAgent : Agent
             return;
         }
         isEndEpisode = true;
-        EndEpisode();
+        //EndEpisode();
         if (SceneController.Transitioning)
         {
             return;
@@ -171,18 +243,18 @@ public class PlayerAgent : Agent
 
     public void OnDie()
     {
-        SetReward(-0.01f);
+        AddReward(rewardOnDie);
         OnEndEpisode();
     }
 
     public void OnDamage()
     {
-        AddReward(-0.01f);
+        AddReward(rewardOnDamage);
     }
 
     public void OnGoal()
     {
-        AddReward(1.0f);
+        AddReward(rewardOnGoal);
         OnEndEpisode();
     }
 
@@ -190,18 +262,18 @@ public class PlayerAgent : Agent
     {
         if (switchStatus[index] == false)
         {
-            AddReward(0.5f);
+            AddReward(rewardOnEnterTrigger);
         }
         switchStatus[index] = true;
     }
 
     public void OnBoxBroken()
     {
-        AddReward(0.5f);
+        AddReward(rewardOnBoxBroken);
     }
 
     public void OnEnemyDie()
     {
-        AddReward(0.5f);
+        AddReward(rewardOnEnemyDie);
     }
 }
