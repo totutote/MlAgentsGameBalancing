@@ -3,6 +3,8 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 using Gamekit3D;
+using System.Collections.Generic;
+using System.Collections;
 
 public class PlayerAgent : Agent
 {
@@ -48,6 +50,9 @@ public class PlayerAgent : Agent
     [SerializeField]
     private float rewardOnEnemyDie = 1.0f;
 
+    [SerializeField]
+    private List<Vector3> startPositions;
+
     private bool[] switchStatus = new bool[10];
 
     private bool isEndEpisode = false;
@@ -58,7 +63,7 @@ public class PlayerAgent : Agent
 
     void Update()
     {
-        if (StepCount > 5000)
+        if (StepCount > 10000)
         {
             OnEndEpisode();
         }
@@ -77,7 +82,7 @@ public class PlayerAgent : Agent
         if (RaySensor != null)
         {
             //RaySensor.position = new Vector3(RaySensor.position.x, 0.0f, RaySensor.position.z);
-            sensorCamera.rotation = Quaternion.Euler(0, 0, 0);
+            RaySensor.rotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
@@ -99,7 +104,23 @@ public class PlayerAgent : Agent
         Debug.Log("OnEpisodeBegin called");
         AudioListener.pause = true;
         isEndEpisode = false;
-        previousPosition = transform.position; // 追加
+        
+        // スタート位置をランダムに設定
+        if (startPositions != null && startPositions.Count > 0)
+        {
+            Vector3 startPos = startPositions[Random.Range(0, startPositions.Count)];
+            StartCoroutine(DelayedSetPosition(startPos));
+        }
+    }
+
+    private IEnumerator DelayedSetPosition(Vector3 startPos)
+    {
+        // 数フレーム遅延させる
+        for (int i = 0; i < 2; i++)
+        {
+            yield return null;
+        }
+        playerInput.transform.localPosition = startPos;
     }
 
     public override void CollectObservations(VectorSensor sensor)

@@ -61,6 +61,7 @@ namespace Gamekit3D
         void Awake()
         {
             UpdateCameraSettings();
+            CinemachineCore.GetInputAxis = GetInputAxisCustom;
         }
 
         void Update()
@@ -85,6 +86,11 @@ namespace Gamekit3D
 
             keyboardAndMouseCamera.Priority.Value = inputChoice == InputChoice.KeyboardAndMouse ? 1 : 0;
             controllerCamera.Priority.Value = inputChoice == InputChoice.Controller ? 1 : 0;
+        }
+
+        float GetInputAxisCustom(string axisName)
+        {
+            return 0f; // マウス入力を無効にする
         }
     } 
 }

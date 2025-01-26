@@ -43,8 +43,8 @@ namespace Gamekit3D
             {
                 var ss = savedStates[savedStates.Count - 1];
                 savedStates.RemoveAt(savedStates.Count - 1);
-                player.transform.position = ss.position;
-                player.transform.rotation = ss.rotation;
+                //player.transform.position = ss.position;
+                //player.transform.rotation = ss.rotation;
             }
         }
 

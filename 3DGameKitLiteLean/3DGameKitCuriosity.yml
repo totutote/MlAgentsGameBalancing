@@ -2,10 +2,10 @@ behaviors:
   3DGameKitDefault:
     trainer_type: sac
     hyperparameters:
-      learning_rate: 0.0003
-      learning_rate_schedule: constant
+      learning_rate: 0.03
+      learning_rate_schedule: linear
       batch_size: 128
-      buffer_size: 2000000
+      buffer_size: 5000
       buffer_init_steps: 1000
       tau: 0.01
       steps_per_update: 10.0
@@ -14,8 +14,8 @@ behaviors:
       reward_signal_steps_per_update: 10.0
     network_settings:
       normalize: false
-      hidden_units: 512
-      num_layers: 3
+      hidden_units: 256
+      num_layers: 4
       vis_encode_type: simple
     reward_signals:
       extrinsic:
@@ -32,3 +32,8 @@ behaviors:
     max_steps: 3000000
     time_horizon: 128
     summary_freq: 30000
+    exploration:
+      epsilon_schedule:
+        initial_epsilon: 1.0
+        final_epsilon: 0.1
+        epsilon_decay_steps: 1000000

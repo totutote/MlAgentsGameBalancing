@@ -16979,18 +16979,22 @@ MonoBehaviour:
   MaxStep: 10000
   playerInput: {fileID: 114603677736913854}
   sensorCamera: {fileID: 849549091803656851}
-  RaySensor: {fileID: 0}
+  RaySensor: {fileID: 6595508896798229577}
   movingPlatform: {fileID: 0}
   enemyControllers: []
   breakableBoxes: []
   switches: []
-  rewardDistanceMoved: 0.0001
-  rewardOnDie: -1
-  rewardOnDamage: -0.1
+  rewardDistanceMoved: 0.001
+  rewardOnDie: 0
+  rewardOnDamage: 0
   rewardOnGoal: 1
   rewardOnEnterTrigger: 1
   rewardOnBoxBroken: 0.3
   rewardOnEnemyDie: 0.3
+  startPositions:
+  - {x: 58, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1}
+  - {x: 41, y: 0, z: 22}
 --- !u!114 &4328622704755690132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17004,7 +17008,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 48
+    VectorObservationSize: 100
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -17194,10 +17198,10 @@ MonoBehaviour:
   m_SensorName: RayPerceptionSensorLow
   m_DetectableTags:
   - Floor
-  m_RaysPerDirection: 5
+  m_RaysPerDirection: 4
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
-  m_RayLength: 20
+  m_RayLength: 10
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 65536
@@ -17223,10 +17227,10 @@ MonoBehaviour:
   m_SensorName: RayPerceptionSensorHigh
   m_DetectableTags:
   - Floor
-  m_RaysPerDirection: 5
+  m_RaysPerDirection: 4
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
-  m_RayLength: 20
+  m_RayLength: 10
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 65536
@@ -17255,7 +17259,7 @@ MonoBehaviour:
   m_RaysPerDirection: 4
   m_MaxRayDegrees: 180
   m_SphereCastRadius: 0.5
-  m_RayLength: 20
+  m_RayLength: 5
   m_RayLayerMask:
     serializedVersion: 2
     m_Bits: 65536
@@ -17276,6 +17280,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3532930372023191506}
   - component: {fileID: 5867684938133037788}
+  - component: {fileID: 1076508657367200970}
   m_Layer: 9
   m_Name: GridSensor
   m_TagString: Untagged
@@ -17310,9 +17315,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a501962d056745d1a30e99146ee39fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SensorName: GridSensor
-  m_CellScale: {x: 1, y: 5.03, z: 1}
-  m_GridSize: {x: 40, y: 1, z: 40}
+  m_SensorName: GridSensorNarrow
+  m_CellScale: {x: 1, y: 7, z: 1}
+  m_GridSize: {x: 30, y: 1, z: 30}
   m_RotateWithAgent: 0
   m_AgentGameObject: {fileID: 457425696334193984}
   m_DetectableTags:
@@ -17328,6 +17333,40 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.030184746, a: 0}
   - {r: 0, g: 0.2758026, b: 1, a: 0}
   - {r: 0, g: 0.9023998, b: 1, a: 0}
+  m_GizmoYOffset: 0
+  m_ShowGizmos: 1
+  m_CompressionType: 1
+  m_ObservationStacks: 1
+--- !u!114 &1076508657367200970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7594731907950671787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a501962d056745d1a30e99146ee39fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SensorName: GridSensorWide
+  m_CellScale: {x: 10, y: 7, z: 10}
+  m_GridSize: {x: 20, y: 1, z: 20}
+  m_RotateWithAgent: 0
+  m_AgentGameObject: {fileID: 0}
+  m_DetectableTags:
+  - Enemy
+  - Box
+  - Pad
+  m_ColliderMask:
+    serializedVersion: 2
+    m_Bits: 8454144
+  m_MaxColliderBufferSize: 500
+  m_InitialColliderBufferSize: 4
+  m_DebugColors:
+  - {r: 1, g: 0.037985973, b: 0, a: 0}
+  - {r: 0.04650232, g: 0.28733748, b: 0.8962264, a: 0}
+  - {r: 0, g: 1, b: 0.91119623, a: 0}
   m_GizmoYOffset: 0
   m_ShowGizmos: 1
   m_CompressionType: 1

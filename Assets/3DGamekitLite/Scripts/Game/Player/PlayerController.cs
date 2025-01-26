@@ -597,8 +597,8 @@ namespace Gamekit3D
             // If there is a checkpoint, move Ellen to it.
             if (m_CurrentCheckpoint != null)
             {
-                transform.position = m_CurrentCheckpoint.transform.position;
-                transform.rotation = m_CurrentCheckpoint.transform.rotation;
+                //transform.position = m_CurrentCheckpoint.transform.position;
+                //transform.rotation = m_CurrentCheckpoint.transform.rotation;
             }
             else
             {
