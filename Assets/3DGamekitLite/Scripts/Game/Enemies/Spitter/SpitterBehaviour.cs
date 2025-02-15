@@ -116,7 +116,7 @@ namespace Gamekit3D
 
         public void Shoot()
         {
-            rangeWeapon.Attack(m_RememberedTargetPosition);
+            //rangeWeapon.Attack(m_RememberedTargetPosition);
         }
 
         public void TriggerAttack()
@@ -160,6 +160,7 @@ namespace Gamekit3D
                 controller.animator.SetBool(hashFleeing, m_Fleeing);
                 return;
             }
+            return;
 
             Vector3 fromTarget = transform.position - m_Target.transform.position;
 

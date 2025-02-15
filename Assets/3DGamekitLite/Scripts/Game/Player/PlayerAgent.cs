@@ -91,7 +91,10 @@ public class PlayerAgent : Agent
         Debug.Log("Initialize called");
         foreach(var breakableBox in breakableBoxes)
         {
-            breakableBox.OnDeath.AddListener(OnBoxBroken);
+            if (breakableBox != null)
+            {
+                breakableBox.OnDeath.AddListener(OnBoxBroken);
+            }
         }
         foreach(var enemyController in enemyControllers)
         {

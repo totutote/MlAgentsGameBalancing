@@ -25,8 +25,8 @@ behaviors:
         learning_rate: 0.0003
         use_actions: true
         use_vail: false
-        demo_path: Assets/Demonstrations/
+        demo_path: Demonstrations/
     keep_checkpoints: 5
-    max_steps: 3000000
+    max_steps: 9000000
     time_horizon: 2048
     summary_freq: 30000
